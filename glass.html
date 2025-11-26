@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bouton Effet Verre</title>
+    <link rel="stylesheet" href="style.css">
+    <style id="dynamicStyles"></style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="button-container">
+            <div class="button-wrap">
+                <button>
+                    <span>Generate</span>
+                </button>
+                <div class="button-shadow"></div>
+            </div>
+        </div>
+        <div class="controls">
+            <label>
+                Reflection Color:
+                <input type="color" id="reflectionColor" value="#B4F0E6">
+                <span id="reflectionColorValue">#B4F0E6</span>
+            </label>
+            <label>
+                Reflection Opacity:
+                <input type="range" id="reflectionOpacity" min="0" max="1" step="0.01" value="0.15">
+                <span id="reflectionOpacityValue">0.15</span>
+            </label>
+            <label>
+                Shadow Blur:
+                <input type="range" id="shadowBlur" min="2" max="12" step="0.5" value="2">
+                <span id="shadowBlurValue">2px</span>
+            </label>
+        </div>
+    </div>
+    <svg style="position:absolute;width:100%;height:100%;z-index:0;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <pattern id="dottedGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="rgba(0,0,0,0.15)" />
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dottedGrid)" />
+    </svg>
+    <script>
+        function hexToRgb(hex) {
+            hex = hex.replace('#', '');
+            if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+            const bigint = parseInt(hex, 16);
+            return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+        }
+        function updateReflection() {
+            const color = document.getElementById('reflectionColor').value;
+            const opacity = document.getElementById('reflectionOpacity').value;
+            document.getElementById('reflectionColorValue').innerText = color;
+            document.getElementById('reflectionOpacityValue').innerText = opacity;
+            const { r, g, b } = hexToRgb(color);
+            document.getElementById('dynamicStyles').innerHTML = `
+        button::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(${r}, ${g}, ${b}, ${opacity}), transparent);
+          pointer-events: none;
+          mix-blend-mode: overlay;
+        }
+      `;
+        }
+        function updateShadowBlur() {
+            const blur = document.getElementById('shadowBlur').value;
+            document.getElementById('shadowBlurValue').innerText = blur + "px";
+            document.querySelector('.button-shadow').style.filter = `blur(${blur}px)`;
+        }
+        document.getElementById('reflectionColor').addEventListener('input', updateReflection);
+        document.getElementById('reflectionOpacity').addEventListener('input', updateReflection);
+        document.getElementById('shadowBlur').addEventListener('input', updateShadowBlur);
+        updateReflection();
+        updateShadowBlur();
+    </script>
+</body>
+
+</html>
