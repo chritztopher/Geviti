@@ -230,7 +230,23 @@ body {
 }
 
 .card-merch {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: auto;
+}
+
+.card-merch .card-image {
+    height: auto;
+    object-fit: contain;
+}
+
+@media (min-width: 600px) {
+    .card-merch {
+        aspect-ratio: 4 / 5;
+    }
+
+    .card-merch .card-image {
+        height: 100%;
+        object-fit: cover;
+    }
 }
 
 
@@ -298,17 +314,36 @@ body {
     overflow: hidden;
 }
 
-/* Card aspect ratios - 4:5 default */
+/* Card aspect ratios - auto on mobile, fixed on desktop */
 .card-strikethrough,
 .card-receipt,
 .card-healthy,
-.card-perfected {
-    aspect-ratio: 4 / 5;
+.card-perfected,
+.card-unwrap {
+    aspect-ratio: auto;
 }
 
-/* Unwrap card is wider (landscape) - approximately 4:3 */
-.card-unwrap {
-    aspect-ratio: 4 / 3;
+.social-grid .card-image {
+    height: auto;
+    object-fit: contain;
+}
+
+@media (min-width: 600px) {
+    .card-strikethrough,
+    .card-receipt,
+    .card-healthy,
+    .card-perfected {
+        aspect-ratio: 4 / 5;
+    }
+
+    .card-unwrap {
+        aspect-ratio: 4 / 3;
+    }
+
+    .social-grid .card-image {
+        height: 100%;
+        object-fit: cover;
+    }
 }
 
 /* Card Images */
